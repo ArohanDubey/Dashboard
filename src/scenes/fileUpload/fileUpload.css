@@ -1,0 +1,75 @@
+/* FileUpload.css */
+
+.file-upload-container {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #f0f0f0;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  .file-upload-container input[type="file"] {
+    margin-bottom: 10px;
+  }
+  
+  .file-upload-container p {
+    font-size: 16px;
+    font-weight: bold;
+    margin-bottom: 10px;
+  }
+  
+  .file-upload-container button {
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    font-size: 14px;
+    cursor: pointer;
+    border-radius: 4px;
+  }
+  
+  .file-upload-container button:hover {
+    background-color: #c82333;
+  }
+  
+  .file-upload-container input[type="text"] {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 8px;
+    margin-bottom: 10px;
+    font-size: 14px;
+  }
+  
+  .file-upload-container table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+  }
+  
+  .file-upload-container th,
+  .file-upload-container td {
+    border: 1px solid #ccc;
+    padding: 8px;
+    text-align: left;
+  }
+  
+  .file-upload-container th {
+    background-color: #f0f0f0;
+  }
+  
+  .file-upload-container tbody {
+    max-height: 400px;
+    overflow-y: auto;
+  }
+  
+  .file-upload-container tbody tr:hover {
+    background-color: #f9f9f9;
+  }
+  .inline{
+    display: flex;
+    flex-direction: row;
+  }
+
+  
