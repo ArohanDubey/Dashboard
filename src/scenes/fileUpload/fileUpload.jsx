@@ -2,10 +2,9 @@
 import React, { useState, useRef } from "react";
 import { Button, Table, TableHead, TableBody,Box, TableRow, TableCell, TextField, Typography, useTheme } from "@mui/material";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
-import DownloadOutlinedIcon from "@mui/icons-material/DownloadOutlined";
 import Papa from "papaparse";
 import * as XLSX from "xlsx";
-
+import axios from "axios";
 const FileUpload = () => {
   const [data, setData] = useState([]);
   const [search, setSearch] = useState("");
@@ -17,8 +16,27 @@ const FileUpload = () => {
   const handleFileUpload = (event) => {
     const file = event.target.files[0];
     setFileName(file.name);
+  
+    // Create a new FormData object
+    const formData = new FormData();
+    formData.append('file', file);
+  
+    // Send the file to the server
+    fetch('http://127.0.0.1:5000/upload', {
+      method: 'POST',
+      body: formData,
+    })
+      .then(response => response.json())
+      .then(data => {
+        // Handle the response data
+        console.log('File uploaded successfully', data);
+      })
+      .catch(error => {
+        console.error('Error uploading file:', error);
+      });
+  
     const reader = new FileReader();
-
+  
     reader.onload = (e) => {
       const binaryStr = e.target.result;
       if (file.type.includes("spreadsheetml") || file.type.includes("excel")) {
@@ -37,13 +55,14 @@ const FileUpload = () => {
         });
       }
     };
-
+  
     if (file.type.includes("spreadsheetml") || file.type.includes("excel")) {
       reader.readAsBinaryString(file);
     } else if (file.type === "text/csv") {
       reader.readAsText(file);
     }
   };
+  
 
   const handleRemoveFile = () => {
     setData([]);
@@ -67,7 +86,7 @@ const FileUpload = () => {
     
   }
   return (
-    <div>
+    <div className="padding" >
       <Button
         variant="contained"
         component="label"

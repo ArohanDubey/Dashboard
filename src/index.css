@@ -39,3 +39,6 @@ body,
 .MuiFormControl-root{
   margin-bottom: 0px !important;
 }
+.padding{
+  padding: 15px 20px;
+}
