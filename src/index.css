@@ -42,3 +42,8 @@ body,
 .padding{
   padding: 15px 20px;
 }
+#htmlRender{
+  height: 470px;
+  width: 90%;
+  border: none;
+}
