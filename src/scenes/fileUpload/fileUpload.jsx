@@ -84,8 +84,9 @@ const FileUpload = () => {
   };
 
   const handlePrompt = () => {
+    
     const filename = "enhanced_interactive_graph.html"; // Replace with your actual HTML file name
-    axios.get(`http://127.0.0.1:5000/display_graph`)
+    axios.get(`http://127.0.0.1:5000/analyze?input=`+search)
       .then(response => {
         setHtmlContent(response.data);
         // document.getElementById("htmlRender").src = "http://localhost:3000/assets/enhanced_interactive_graph.html";
@@ -93,6 +94,7 @@ const FileUpload = () => {
       })
       .catch(error => {
         console.error('Error fetching HTML file:', error);
+        alert("Hello! Internal Server Error");
       });
   };
 
@@ -142,7 +144,7 @@ const FileUpload = () => {
         </Button>
       </Box>
 
-      <div style={{ maxHeight: "400px", overflowY: "scroll", marginBottom: '1rem' }}>
+      {/* <div style={{ maxHeight: "400px", overflowY: "scroll", marginBottom: '1rem' }}>
         <Table>
           <TableHead>
             <TableRow>
@@ -162,7 +164,7 @@ const FileUpload = () => {
             ))}
           </TableBody>
         </Table>
-      </div>
+      </div> */}
 
       {/* {htmlContent && (
         <div dangerouslySetInnerHTML={{ __html: htmlContent }} />
