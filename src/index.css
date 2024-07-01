@@ -47,3 +47,15 @@ body,
   width: 90%;
   border: none;
 }
+.uploadFile {
+  width: 70%;
+  margin-right: 8px;
+  height: 10%;
+  padding: 7px 14px;
+}
+.flex-align-center {
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
