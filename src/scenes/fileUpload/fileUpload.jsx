@@ -1,15 +1,12 @@
 import React, { useState, useRef } from "react";
-import {
-  Button,
-  Box,
-  TextField,
-  Typography,
-  Skeleton,
-} from "@mui/material";
+import { Bounce, ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { Button, Box, TextField, Typography, Skeleton, Slide, useTheme } from "@mui/material";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import Papa from "papaparse";
 import * as XLSX from "xlsx";
 import axios from "axios";
+
 
 const FileUpload = () => {
   const [search, setSearch] = useState("");
@@ -17,7 +14,7 @@ const FileUpload = () => {
   const [htmlContent, setHtmlContent] = useState("");
   const [loading, setLoading] = useState(false);
   const fileInputRef = useRef(null);
-
+  const theme=useTheme();
   const handleFileUpload = (event) => {
     const file = event.target.files[0];
     setFileName(file.name);
@@ -65,11 +62,23 @@ const FileUpload = () => {
       })
       .catch((error) => {
         console.error("Error fetching HTML file:", error);
-        alert("Hello! Internal Server Error");
         setLoading(false);
+        alertError();
       });
   };
-
+  const alertError = () => {
+    toast.error("Internal Server Error: Graph Not Generated",{
+      position: "top-center",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: theme.palette?.mode,
+      transition: Bounce,
+      });
+  };
   return (
     <div className="padding">
       <Button
@@ -90,8 +99,15 @@ const FileUpload = () => {
 
       {fileName && (
         <div style={{ marginBottom: "1rem" }} className="flex-align-center">
-          <Typography variant="body1" className="uploadFile">{fileName}</Typography>
-          <Button variant="outlined" color="error" onClick={handleRemoveFile} sx={{marginLeft: "8px"}}>
+          <Typography variant="body1" className="uploadFile">
+            {fileName}
+          </Typography>
+          <Button
+            variant="outlined"
+            color="error"
+            onClick={handleRemoveFile}
+            sx={{ marginLeft: "8px" }}
+          >
             Remove File
           </Button>
         </div>
@@ -118,17 +134,28 @@ const FileUpload = () => {
           color="secondary"
           onClick={handlePrompt}
           size="medium"
-          sx={{ height: "100%", marginLeft: "8px" ,padding: "5px 28px"}}
+          sx={{ height: "100%", marginLeft: "8px", padding: "5px 28px" }}
         >
           Submit
         </Button>
       </Box>
 
       {loading ? (
-        <Skeleton animation="wave" variant="rectangular" width="100%" height={400} />
+        <Skeleton
+          animation="wave"
+          variant="rectangular"
+          width="100%"
+          height={400}
+        />
       ) : (
-        <iframe id="htmlRender" style={{ width: "100%", height: "400px", border: "none" }}></iframe>
+        <iframe
+          id="htmlRender"
+          style={{ width: "100%", height: "400px", border: "none" }}
+        ></iframe>
       )}
+        <ToastContainer  />  
+         
+      
     </div>
   );
 };
