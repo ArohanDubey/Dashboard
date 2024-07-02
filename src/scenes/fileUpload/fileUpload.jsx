@@ -56,8 +56,10 @@ const FileUpload = () => {
       .get(`http://127.0.0.1:5000/analyze?input=${search}`)
       .then((response) => {
         setHtmlContent(response.data);
-        const iframe = document.getElementById("htmlRender");
-        iframe.srcdoc = response.data;
+        setTimeout(() => {
+          const iframe = document.getElementById("htmlRender");
+          iframe.srcdoc = response.data;
+        });
         setLoading(false);
       })
       .catch((error) => {
