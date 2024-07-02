@@ -69,7 +69,7 @@ const FileUpload = () => {
       });
   };
   const alertError = () => {
-    toast.error("Internal Server Error: Graph Not Generated",{
+    toast.error("Graph cannot be Generated please try again",{
       position: "top-center",
       autoClose: 5000,
       hideProgressBar: false,
