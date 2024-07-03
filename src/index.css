@@ -97,3 +97,25 @@ body,
   background: transparent !important;
   -webkit-box-shadow: 0 0 0 100px #fff inset !important; 
 }
+/* width */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 5px grey;
+  border-radius: 10px;
+}
+
+/* Handle */
+.dark ::-webkit-scrollbar-thumb {
+  background: #141b2d;
+  border-radius: 10px;
+}
+
+.light ::-webkit-scrollbar-thumb {
+  background: #eee;
+  border-radius: 10px;
+}

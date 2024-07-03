@@ -317,10 +317,9 @@ dev.splice(response.data.indexOf('<div>')+4,0, ' style="display:flex; justify-co
         
         component={Paper}
         style={{
-          marginTop: "20px",
-          width: "100%",
+          width: "max-content",
           height: "100%", 
-          overflow: "auto", 
+          overflow: "visible", 
         }}
       >
         <Table stickyHeader> 
