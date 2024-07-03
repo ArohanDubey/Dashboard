@@ -84,7 +84,7 @@ const FileUpload = () => {
 
   const handleSearch = (event) => {
     const value = event.target.value.toLowerCase();
-    setSearch(value);
+    setSearch(value.replaceAll('&', ' and '));
   };
 
   const handlePrompt = () => {
@@ -319,11 +319,11 @@ dev.splice(response.data.indexOf('<div>')+4,0, ' style="display:flex; justify-co
         style={{
           marginTop: "20px",
           width: "100%",
-          height: "100%", // Fixed height
-          overflow: "auto", // Enable scrolling
+          height: "100%", 
+          overflow: "auto", 
         }}
       >
-        <Table stickyHeader> {/* Added stickyHeader to keep header fixed during scroll */}
+        <Table stickyHeader> 
           <TableHead>
             <TableRow>
               {rows[0].map((cell, index) => (
