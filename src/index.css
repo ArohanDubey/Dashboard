@@ -70,17 +70,30 @@ body,
   border-color: black !important;
 }
 
-.cancelButton{
+.cancelButton {
   cursor: pointer;
   position: fixed;
-  top: 50px;
-  right: 50px;
-  width: 14px;
-  height: 14px;
-  Z-INDEX: 2001;
+
+
+  z-index: 2001;
   background: #000;
   border-radius: 12px;
   display: flex;
   align-items: center;
   justify-content: center;
+
+  top: 30px;
+  right: 30px;
+  width: 14px;
+  height: 14px;
+  color: #fff;
+}
+
+.dark :-webkit-autofill{
+  background: transparent !important;
+  -webkit-box-shadow: 0 0 0 100px #141b2d inset !important; 
+}
+.light :-webkit-autofill{
+  background: transparent !important;
+  -webkit-box-shadow: 0 0 0 100px #fff inset !important; 
 }
