@@ -59,3 +59,28 @@ body,
   align-items: center;
   justify-content: flex-start;
 }
+
+/* Dark mode focus style */
+.dark .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline {
+  border-color: white !important;
+}
+
+/* Light mode focus style */
+.light .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline {
+  border-color: black !important;
+}
+
+.cancelButton{
+  cursor: pointer;
+  position: fixed;
+  top: 50px;
+  right: 50px;
+  width: 14px;
+  height: 14px;
+  Z-INDEX: 2001;
+  background: #000;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

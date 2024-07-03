@@ -1,10 +1,12 @@
 import React, { useState, useRef } from "react";
 import { Bounce, ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { Button, Box, TextField, Typography, Skeleton, Slide, useTheme } from "@mui/material";
+import { Button, Box, TextField, Typography, Skeleton, Modal, useTheme } from "@mui/material";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
-import Papa from "papaparse";
-import * as XLSX from "xlsx";
+import { tokens } from "../../theme";
+import { MdCancel } from "react-icons/md";
+import { BsArrowsFullscreen } from "react-icons/bs";
+import { ExcelRenderer, OutTable } from "react-excel-renderer";
 import axios from "axios";
 
 
@@ -13,8 +15,12 @@ const FileUpload = () => {
   const [fileName, setFileName] = useState("");
   const [htmlContent, setHtmlContent] = useState("");
   const [loading, setLoading] = useState(false);
+  const [srcdoc, setSrcdoc] = useState();
   const fileInputRef = useRef(null);
-  const theme=useTheme();
+  const [fullScreen, setFullScreen] = useState(false);
+  const [previewOpen, setPreviewOpen] = useState(false);
+  const theme = useTheme();
+  const colors = tokens(theme.palette.mode);
   const handleFileUpload = (event) => {
     const file = event.target.files[0];
     setFileName(file.name);
@@ -53,12 +59,11 @@ const FileUpload = () => {
     setLoading(true);
     const filename = "enhanced_interactive_graph.html";
     axios
-      .get(`http://127.0.0.1:5000/analyze?input=${search}`)
+      .get(`http://127.0.0.1:5000/analyze?input=${search+ '. Graph height should be '+window.innerHeight+'px and width '+window.innerWidth+'px.'}`)
       .then((response) => {
         setHtmlContent(response.data);
         setTimeout(() => {
-          const iframe = document.getElementById("htmlRender");
-          iframe.srcdoc = response.data;
+          setSrcdoc(response.data)
         });
         setLoading(false);
       })
@@ -81,6 +86,18 @@ const FileUpload = () => {
       transition: Bounce,
       });
   };
+
+  const handleShowPreview = () => {
+    setPreviewOpen(true);
+  };
+
+  const handleClosePreview = () => {
+    setPreviewOpen(false);
+  };
+
+  const toggleFullScreen = () => {
+    setFullScreen(!fullScreen);
+  };
   return (
     <div className="padding">
       <Button
@@ -98,7 +115,16 @@ const FileUpload = () => {
           style={{ display: "none" }}
         />
       </Button>
-
+      {fileName && (
+        <Button
+          variant="outlined"
+          color="primary"
+          onClick={handleShowPreview}
+          sx={{ marginBottom: 2 }}
+        >
+          Show Preview
+        </Button>
+      )}
       {fileName && (
         <div style={{ marginBottom: "1rem" }} className="flex-align-center">
           <Typography variant="body1" className="uploadFile">
@@ -142,6 +168,24 @@ const FileUpload = () => {
         </Button>
       </Box>
 
+      <Box sx={{ display: "flex", alignItems: "center", marginBottom: 2 }}>
+        {srcdoc && !loading && !fullScreen? <Button
+          variant="outlined"
+          color="primary"
+          onClick={toggleFullScreen}
+          size="medium"
+          sx={{
+            backgroundColor: colors.blueAccent[700],
+            color: colors.grey[100],
+            fontSize: "14px",
+            fontWeight: "bold",
+            padding: "10px 20px",
+          }}
+        >
+         <BsArrowsFullscreen />
+        </Button> : ""}
+      </Box>
+
       {loading ? (
         <Skeleton
           animation="wave"
@@ -150,10 +194,17 @@ const FileUpload = () => {
           height={400}
         />
       ) : (
-        <iframe
+        fullScreen ? ( <div style={{ zIndex:2000,position:"fixed", top:0,left:0, width: "100vw", height: "100vh", }}>
+          <div onClick={setFullScreen.bind(this,false)} style={{ cursor:'pointer', position:"fixed", top:"50px",right:"50px", width: "20px", height: "20px", }}><MdCancel className="cancelButton"/></div>
+          <iframe srcdoc={srcdoc}
+          id="htmlRender"
+          style={{ width: "100%", height: "100%", border: "none" }}
+        ></iframe>
+        </div>
+        ):(<iframe srcdoc={srcdoc}
           id="htmlRender"
           style={{ width: "100%", height: "400px", border: "none" }}
-        ></iframe>
+        ></iframe>)
       )}
         <ToastContainer  />  
          
