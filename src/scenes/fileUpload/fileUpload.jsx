@@ -83,17 +83,17 @@ const FileUpload = () => {
   };
 
   const handleSearch = (event) => {
-    const value = event.target.value.toLowerCase();
-    setSearch(value.replaceAll('&', ' and '));
+    const value = event.target.value;
+    setSearch(value);
   };
 
   const handlePrompt = () => {
     setLoading(true);
-    const filename = "enhanced_interactive_graph.html";
+    setSrcdoc("");
     axios
       .get(
         `http://127.0.0.1:5000/analyze?input=${
-          search +
+          search.toLowerCase().replaceAll('&', ' and ') +
           ". Graph height should be " +
           window.innerHeight +
           "px and width " +
@@ -118,6 +118,7 @@ dev.splice(response.data.indexOf('<div>')+4,0, ' style="display:flex; justify-co
       });
   };
   const alertError = () => {
+   
     toast.error("Graph cannot be Generated please try again", {
       position: "top-center",
       autoClose: 5000,
