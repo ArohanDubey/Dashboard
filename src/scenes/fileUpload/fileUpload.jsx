@@ -274,14 +274,14 @@ dev.splice(response.data.indexOf('<div>')+4,0, ' style="display:flex; justify-co
             <MdCancel className="cancelButton" />
           </div>
           <iframe
-            srcdoc={srcdoc}
+            srcDoc={srcdoc}
             id="htmlRender"
             style={{ width: window.innerWidth, height: window.innerHeight, border: "none" }}
           ></iframe>
         </div>
       ) : (
         <iframe
-          srcdoc={srcdoc}
+          srcDoc={srcdoc}
           id="htmlRender"
           style={{ width: "100%", height: "400px", border: "none" }}
         ></iframe>
