@@ -16,6 +16,7 @@ import PieChartOutlineOutlinedIcon from "@mui/icons-material/PieChartOutlineOutl
 import TimelineOutlinedIcon from "@mui/icons-material/TimelineOutlined";
 import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
 import MapOutlinedIcon from "@mui/icons-material/MapOutlined";
+import { IoChatbubbleEllipses } from "react-icons/io5";
 
 const Item = ({ title, to, icon, selected, setSelected }) => {
   const theme = useTheme();
@@ -107,7 +108,7 @@ const Sidebar = () => {
                   fontWeight="bold"
                   sx={{ m: "10px 0 0 0" }}
                 >
-                  Arohan Harsh Dubey
+                  Arohan Dubey
                 </Typography>
                 <Typography variant="h5" color={colors.greenAccent[500]}>
                   Admin
@@ -117,14 +118,20 @@ const Sidebar = () => {
           )}
 
           <Box paddingLeft={isCollapsed ? undefined : "10%"}>
-            {/* <Item
+            <Item
               title="Dashboard"
               to="/"
               icon={<HomeOutlinedIcon />}
               selected={selected}
               setSelected={setSelected}
-            /> */}
-
+            />
+            <Item
+              title="Dashboard Form"
+              to="/dashboardForm"
+              icon={<HomeOutlinedIcon />}
+              selected={selected}
+              setSelected={setSelected}
+            />
             {/* <Typography
               variant="h6"
               color={colors.grey[300]}
@@ -162,9 +169,9 @@ const Sidebar = () => {
               Pages
             </Typography>
             <Item
-              title="File Upload"
+              title="Chat"
               to="/fileUpload"
-              icon={<PersonOutlinedIcon />}
+              icon={<IoChatbubbleEllipses/>}
               selected={selected}
               setSelected={setSelected}
             />

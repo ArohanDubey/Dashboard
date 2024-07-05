@@ -12,19 +12,21 @@ import GeographyChart from "../../components/GeographyChart";
 import BarChart from "../../components/BarChart";
 import StatBox from "../../components/StatBox";
 import ProgressCircle from "../../components/ProgressCircle";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import {  useNavigate } from "react-router-dom";
+import DashboardForm from "../DashboardForm/DashboardForm";
 
 const Dashboard = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const navigate = useNavigate();
+  const [open , setOpen]= useState()
   useEffect(()=>{
-    navigate('fileUpload')
+    setOpen(true)
   },[])
  
   return (
-    false &&
+    // false &&
     <Box m="20px">
       {/* HEADER */}
       <Box display="flex" justifyContent="space-between" alignItems="center">
@@ -231,7 +233,7 @@ const Dashboard = () => {
           p="30px"
         >
           <Typography variant="h5" fontWeight="600">
-            Campaign
+            {/* Campaign */}
           </Typography>
           <Box
             display="flex"
@@ -239,15 +241,15 @@ const Dashboard = () => {
             alignItems="center"
             mt="25px"
           >
-            <ProgressCircle size="125" />
-            <Typography
+            {/* <ProgressCircle size="125" /> */}
+            {/* <Typography
               variant="h5"
               color={colors.greenAccent[500]}
               sx={{ mt: "15px" }}
             >
               $48,352 revenue generated
-            </Typography>
-            <Typography>Includes extra misc expenditures and costs</Typography>
+            </Typography> */}
+            {/* <Typography>Includes extra misc expenditures and costs</Typography> */}
           </Box>
         </Box>
         <Box
@@ -260,10 +262,10 @@ const Dashboard = () => {
             fontWeight="600"
             sx={{ padding: "30px 30px 0 30px" }}
           >
-            Sales Quantity
+            {/* Sales Quantity */}
           </Typography>
           <Box height="250px" mt="-20px">
-            <BarChart isDashboard={true} />
+            {/* <BarChart isDashboard={true} /> */}
           </Box>
         </Box>
         <Box
@@ -277,11 +279,12 @@ const Dashboard = () => {
             fontWeight="600"
             sx={{ marginBottom: "15px" }}
           >
-            Geography Based Traffic
+            {/* Geography Based Traffic */}
           </Typography>
           <Box height="200px">
-            <GeographyChart isDashboard={true} />
+            {/* <GeographyChart isDashboard={true} /> */}
           </Box>
+          {open && <DashboardForm setOpen={setOpen}></DashboardForm>}
         </Box>
       </Box>
     </Box>
