@@ -43,9 +43,6 @@ body {
     cursor: pointer;
   }
   
-  .login-form .input-button:hover {
-    background-color: #3a66d1;
-  }
 .login-form button {
     width: 100%;
     padding: 10px;

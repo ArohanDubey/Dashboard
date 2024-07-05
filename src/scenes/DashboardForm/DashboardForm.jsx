@@ -1,14 +1,26 @@
-import React, { useState } from 'react';
-import CircularProgress from '@mui/material/CircularProgress';
-import './DashboardForm.css';
+import React, { useState, useRef } from "react";
+import CircularProgress from "@mui/material/CircularProgress";
+import CloudUploadIcon from "@mui/icons-material/CloudUpload";
+import "./DashboardForm.css";
+import { useTheme, Button } from "@mui/material";
+import { tokens } from "../../theme";
+import * as XLSX from "xlsx";
+
+
 
 const DashboardForm = (props) => {
+  const [fileName, setFileName] = useState("");
+  const [loading, setLoading] = useState(false);
+  const theme = useTheme();
+  const fileInputRef = useRef(null);
+  const colors = tokens(theme.palette.mode);
+  const [rows, setRows] = useState([]);
+  const [showTable, setShowTable] = useState(false);
   const [formData, setFormData] = useState({
-    name: '',
-    dashboardName: '',
+    name: "",
+    dashboardName: "",
     file: null,
   });
-  const [loading, setLoading] = useState(false);
 
   const handleChange = (e) => {
     const { name, value, files } = e.target;
@@ -21,20 +33,54 @@ const DashboardForm = (props) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     setLoading(true);
-    // Simulate an async operation such as an API call
     setTimeout(() => {
       console.log(formData);
       setLoading(false);
-      props.setOpen(false)
-      // Handle form submission logic here
-    }, 2000); // Simulate a 2-second delay
+      props.setOpen(false);
+    }, 2000);
+  };
+
+  const handleFileUpload = (event) => {
+    const file = event.target.files[0];
+    setFileName(file.name);
+
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const data = new Uint8Array(e.target.result);
+      const workbook = XLSX.read(data, { type: "array" });
+      const worksheet = workbook.Sheets[workbook.SheetNames[0]];
+      const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
+
+      setRows(jsonData);
+      setShowTable(false);
+      props.onFileUpload(jsonData);
+    };
+
+    reader.readAsArrayBuffer(file);
+    const formData = new FormData();
+    formData.append("file", file);
+
+    fetch("http://127.0.0.1:5000/upload", {
+      method: "POST",
+      body: formData,
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log("File uploaded successfully", data);
+      })
+      .catch((error) => {
+        console.error("Error uploading file:", error);
+      });
   };
 
   return (
     <div className="dashboard_form_container">
       <div className="login-form">
         <h1>Welcome to DataInsight!</h1>
-        <h3>Your AI-powered solution for CSV data analysis, summaries, charts and more.</h3>
+        <h3>
+          Your AI-powered solution for CSV data analysis, summaries, charts and
+          more.
+        </h3>
         <form onSubmit={handleSubmit}>
           <input
             type="text"
@@ -43,7 +89,8 @@ const DashboardForm = (props) => {
             value={formData.name}
             onChange={handleChange}
             required
-          /><br />
+          />
+          <br />
           <input
             type="text"
             name="dashboardName"
@@ -51,21 +98,33 @@ const DashboardForm = (props) => {
             value={formData.dashboardName}
             onChange={handleChange}
             required
-          /><br />
-          <input
-            type="file"
-            name="file"
-            className='input-button'
-            accept=".xls,.xlsx"
-            onChange={handleChange}
-            required
-          /><br />
-          
+          />
+          <br />
+          <Button
+            variant="contained"
+            component="label"
+            startIcon={<CloudUploadIcon />}
+            sx={{ marginBottom: 2 }}
+          >
+            Upload Excel
+            <input
+              type="file"
+              accept=".csv, .xlsx, .xls"
+              onChange={handleFileUpload}
+              ref={fileInputRef}
+              style={{ display: "none" }}
+            />
+          </Button>
+          {fileName && <p>File Selected: {fileName}</p>}
+          <br />
           <button type="submit" disabled={loading}>
-            {loading ? <CircularProgress size={24} color="inherit" /> : 'Create Dashboard'}
+            {loading ? (
+              <CircularProgress size={24} color="inherit" />
+            ) : (
+              "Create Dashboard"
+            )}
           </button>
-            {loading? <p>Analyzing the data. Please wait... </p> : ""}
-
+          {loading && <p>Analyzing the data. Please wait...</p>}
         </form>
       </div>
     </div>
