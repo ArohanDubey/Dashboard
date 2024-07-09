@@ -21,7 +21,7 @@ import DashboardForm from "./scenes/DashboardForm/DashboardForm.jsx";
 function App() {
   const [theme, colorMode] = useMode();
   const [isSidebar, setIsSidebar] = useState(true);
-
+  const [defaultOpen, setDefaultOpen] = useState(false);
   return (
     <ColorModeContext.Provider value={colorMode}>
       <ThemeProvider theme={theme}>
@@ -31,7 +31,7 @@ function App() {
           <main className="content">
             <Topbar setIsSidebar={setIsSidebar} />
             <Routes>
-              <Route path="/" element={<Dashboard/>} />
+              <Route path="/" element={<Dashboard defaultOpen={defaultOpen} setDefaultOpen={setDefaultOpen}  />} />
               <Route path="/team" element={<Team />} />
               <Route path="/contacts" element={<Contacts />} />
               <Route path="/invoices" element={<Invoices />} />

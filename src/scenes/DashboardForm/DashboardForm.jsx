@@ -5,7 +5,7 @@ import "./DashboardForm.css";
 import { useTheme, Button } from "@mui/material";
 import { tokens } from "../../theme";
 import * as XLSX from "xlsx";
-
+import axios from "axios";
 
 
 const DashboardForm = (props) => {
@@ -22,6 +22,35 @@ const DashboardForm = (props) => {
     file: null,
   });
 
+  const dummyData={
+    "summary": [
+      {
+        "Key": "Sales",
+        "Value": "$1,000,000",
+        
+      },
+      {
+        "Key": "Revenue",
+        "Value": "$500,000",
+        
+      },
+      {
+        "Key": "Profit",
+        "Value": "$200,000",
+        
+      },
+      {
+        "Key": "Customer Satisfaction",
+        "Value": "90%",
+        
+      }
+    ],
+    "html_files": {
+      "pie_chart.html": "<html>\n<head>\n<title>Pie Chart</title>\n<script src=\"https://cdn.jsdelivr.net/npm/chart.js\"></script>\n</head>\n<body>\n<canvas id=\"pieChart\"></canvas>\n<script>\nvar ctx = document.getElementById('pieChart').getContext('2d');\nvar pieChart = new Chart(ctx, {\ntype: 'pie',\ndata: {\nlabels: ['Sales', 'Revenue', 'Profit', 'Customer Satisfaction'],\ndatasets: [{\ndata: [1000000, 500000, 200000, 90],\nbackgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#FF5733']\n}]\n},\noptions: {\nresponsive: true\n}\n});\n</script>\n</body>\n</html>",
+      "bar_chart.html": "<html>\n<head>\n<title>Bar Chart</title>\n<script src=\"https://cdn.jsdelivr.net/npm/chart.js\"></script>\n</head>\n<body>\n<canvas id=\"barChart\"></canvas>\n<script>\nvar ctx = document.getElementById('barChart').getContext('2d');\nvar barChart = new Chart(ctx, {\ntype: 'bar',\ndata: {\nlabels: ['Sales', 'Revenue', 'Profit', 'Customer Satisfaction'],\ndatasets: [{\nlabel: 'Metrics',\ndata: [1000000, 500000, 200000, 90],\nbackgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#FF5733']\n}]\n},\noptions: {\nresponsive: true\n}\n});\n</script>\n</body>\n</html>",
+      "line_chart.html": "<html>\n<head>\n<title>Line Chart</title>\n<script src=\"https://cdn.jsdelivr.net/npm/chart.js\"></script>\n</head>\n<body>\n<canvas id=\"lineChart\"></canvas>\n<script>\nvar ctx = document.getElementById('lineChart').getContext('2d');\nvar lineChart = new Chart(ctx, {\ntype: 'line',\ndata: {\nlabels: ['Q1', 'Q2', 'Q3', 'Q4'],\ndatasets: [{\nlabel: 'Sales',\ndata: [250000, 300000, 200000, 250000],\nborderColor: '#FF6384',\nfill: false\n}, {\nlabel: 'Revenue',\ndata: [120000, 150000, 100000, 130000],\nborderColor: '#36A2EB',\nfill: false\n}, {\nlabel: 'Profit',\ndata: [50000, 60000, 40000, 50000],\nborderColor: '#FFCE56',\nfill: false\n}, {\nlabel: 'Customer Satisfaction',\ndata: [85, 88, 86, 90],\nborderColor: '#FF5733',\nfill: false\n}]\n},\noptions: {\nresponsive: true\n}\n});\n</script>\n</body>\n</html>"
+    }
+  }
   const handleChange = (e) => {
     const { name, value, files } = e.target;
     setFormData((prevData) => ({
@@ -38,6 +67,12 @@ const DashboardForm = (props) => {
       setLoading(false);
       props.setOpen(false);
     }, 2000);
+
+    axios.get('http://127.0.0.1:5000/dashboard').then((response) => {
+      console.log("Response Data",response.data)
+      props.setDashboardData(dummyData)
+      console.log('success')
+    }).catch();
   };
 
   const handleFileUpload = (event) => {

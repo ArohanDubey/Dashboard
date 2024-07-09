@@ -29,12 +29,13 @@ import ProgressCircle from "../../components/ProgressCircle";
 import { useNavigate } from "react-router-dom";
 import DashboardForm from "../DashboardForm/DashboardForm";
 
-const Dashboard = () => {
+const Dashboard = (props) => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
   const [rows, setRows] = useState([]);
+  const [dashboardData, setDashboardData] = useState([]);
   const handleDownloadClick = () => {
     setOpen(true);
   };
@@ -44,9 +45,17 @@ const Dashboard = () => {
   };
 
   useEffect(() => {
-    setOpen(true);
+    if(!props.defaultOpen){
+      props.setDefaultOpen(true);
+      setOpen(true);
+    }
+    
   }, []);
 
+  useEffect(() => {
+    console.log(dashboardData);
+    
+  }, [dashboardData]);
   return (
     <Box m="20px">
       {/* HEADER */}
@@ -70,7 +79,7 @@ const Dashboard = () => {
       </Box>
 
       {open ? (
-        <DashboardForm setOpen={setOpen} onFileUpload={handleFileUpload} />
+        <DashboardForm setOpen={setOpen} onFileUpload={handleFileUpload} setDashboardData={setDashboardData} />
       ) : (
         <Box
           display="grid"
@@ -158,59 +167,6 @@ const Dashboard = () => {
 
           {/* ROW 2 */}
           <Box
-            gridColumn="span 12"
-            gridRow="span 3"
-            backgroundColor={colors.primary[400]}
-            display="flex"
-            flexDirection="column"
-          >
-            <Box
-              mt="25px"
-              p="0"
-              display="flex"
-              justifyContent="space-between"
-              alignItems="center"
-            >
-            </Box>
-            <Box
-              flex="1"
-              overflow="auto"
-              maxHeight="400px"
-              p="10px"
-              bgcolor={colors.primary[400]}
-            >
-              <TableContainer 
-              component={Paper}
-              style={{
-                width: "max-content",
-                height: "100%",
-                overflow: "visible",
-              }}
-              >
-                <Table stickyHeader>
-                  <TableHead>
-                    <TableRow>
-                      {rows[0]?.map((cell, index) => (
-                        <TableCell key={index}>{cell}</TableCell>
-                      ))}
-                    </TableRow>
-                  </TableHead>
-                  <TableBody>
-                    {rows.slice(1).map((row, rowIndex) => (
-                      <TableRow key={rowIndex}>
-                        {row.map((cell, cellIndex) => (
-                          <TableCell key={cellIndex}>{cell}</TableCell>
-                        ))}
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-              </TableContainer>
-            </Box>
-          </Box>
-
-          {/* ROW 3 */}
-          <Box
             gridColumn="span 4"
             gridRow="span 2"
             backgroundColor={colors.primary[400]}
@@ -271,6 +227,62 @@ const Dashboard = () => {
               <GeographyChart isDashboard={true} />
             </Box>
           </Box>
+          <Box
+            gridColumn="span 12"
+            // gridRow="span 2"
+            height="max-content"
+            backgroundColor={colors.primary[400]}
+            display="flex"
+            flexDirection="column"
+          >
+            <Box
+              mt="25px"
+              p="0"
+              display="flex"
+              justifyContent="space-between"
+              alignItems="center"
+            >
+            </Box>
+            <Box
+              flex="1"
+              overflow="auto"
+              maxHeight="400px"
+              p="0px 10px 10px 10px"
+              bgcolor={colors.primary[400]}
+            >
+              <TableContainer 
+              component={Paper}
+              style={{
+                width: "max-content",
+                minWidth:"100%",
+                height: "fit-content",
+                overflow: "visible",
+              }}
+              >
+                <Table stickyHeader>
+                  <TableHead>
+                    <TableRow>
+                      {rows[0]?.map((cell, index) => (
+                        <TableCell key={index}>{cell}</TableCell>
+                      ))}
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    {rows.slice(1).map((row, rowIndex) => (
+                      <TableRow key={rowIndex}>
+                        {row.map((cell, cellIndex) => (
+                          <TableCell key={cellIndex}>{cell}</TableCell>
+                        ))}
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </TableContainer>
+            </Box>
+          </Box>
+
+          {/* ROW 3 */}
+          
         </Box>
       )}
     </Box>

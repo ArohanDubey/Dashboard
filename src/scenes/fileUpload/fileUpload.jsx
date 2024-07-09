@@ -150,7 +150,7 @@ const FileUpload = () => {
   };
   return (
     <div className={"padding " + theme.palette.mode}>
-      <Button
+      {/* <Button
         variant="contained"
         component="label"
         startIcon={<CloudUploadIcon />}
@@ -163,7 +163,7 @@ const FileUpload = () => {
           ref={fileInputRef}
           style={{ display: "none" }}
         />
-      </Button>
+      </Button> */}
       {fileName && (
         <>
           <Button

@@ -134,3 +134,8 @@ body,
  .primaryButton:hover{
   background-color: #45bb9c !important; 
   }
+
+  .confirmationPopup{
+    background-color: #141b2d !important;
+    color: white !important;
+  }
