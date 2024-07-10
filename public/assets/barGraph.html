@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bar Graph Example</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <h1>Bar Graph Example</h1>
+    <canvas id="myBarChart" width="400" height="200"></canvas>
+    
+    <script>
+        // Get the context of the canvas element we want to select
+        var ctx = document.getElementById('myBarChart').getContext('2d');
+
+        // Create the bar chart
+        var myBarChart = new Chart(ctx, {
+            type: 'bar', // Specify the chart type
+            data: {
+                labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'], // The labels for the chart
+                datasets: [{
+                    label: '# of Votes', // The label for the dataset
+                    data: [12, 19, 3, 5, 2, 3], // The data for the chart
+                    backgroundColor: [ // The background color of the bars
+                        'rgba(255, 99, 132, 0.2)',
+                        'rgba(54, 162, 235, 0.2)',
+                        'rgba(255, 206, 86, 0.2)',
+                        'rgba(75, 192, 192, 0.2)',
+                        'rgba(153, 102, 255, 0.2)',
+                        'rgba(255, 159, 64, 0.2)'
+                    ],
+                    borderColor: [ // The border color of the bars
+                        'rgba(255, 99, 132, 1)',
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(255, 206, 86, 1)',
+                        'rgba(75, 192, 192, 1)',
+                        'rgba(153, 102, 255, 1)',
+                        'rgba(255, 159, 64, 1)'
+                    ],
+                    borderWidth: 1 // The border width of the bars
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true // The y-axis should start at zero
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>

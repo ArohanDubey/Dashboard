@@ -22,16 +22,23 @@ function App() {
   const [theme, colorMode] = useMode();
   const [isSidebar, setIsSidebar] = useState(true);
   const [defaultOpen, setDefaultOpen] = useState(false);
+  const [dashboardData, setDashboardData] = useState([]);
+  const [rows, setRows] = useState([]);
+  const [formData, setFormData] = useState({
+    name: "",
+    dashboardName: "",
+    file: null,
+  });
   return (
     <ColorModeContext.Provider value={colorMode}>
       <ThemeProvider theme={theme}>
         <CssBaseline />
         <div className="app">
-          <Sidebar isSidebar={isSidebar} />
+          <Sidebar isSidebar={isSidebar} formData={formData}/>
           <main className="content">
             <Topbar setIsSidebar={setIsSidebar} />
             <Routes>
-              <Route path="/" element={<Dashboard defaultOpen={defaultOpen} setDefaultOpen={setDefaultOpen}  />} />
+              <Route path="/" element={<Dashboard formData={formData} setFormData={setFormData} rows={rows} setRows={setRows} defaultOpen={defaultOpen} setDefaultOpen={setDefaultOpen} dashboardData={dashboardData} setDashboardData={setDashboardData}/>} />
               <Route path="/team" element={<Team />} />
               <Route path="/contacts" element={<Contacts />} />
               <Route path="/invoices" element={<Invoices />} />

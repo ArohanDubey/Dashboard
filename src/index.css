@@ -139,3 +139,8 @@ body,
     background-color: #141b2d !important;
     color: white !important;
   }
+
+  iframe{
+    border: none;
+  outline: none;
+  }

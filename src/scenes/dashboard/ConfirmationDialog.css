@@ -1,0 +1,85 @@
+/* ConfirmationDialog.css */ 
+:root {
+    --motion-ease: cubic-bezier(0.68, -0.6, 0.32, 1.6);
+    --motion-duration: 0.12s;
+  }
+.dialog-paper {
+    padding: 20px !important;
+    background-color: #141b2d !important;
+    border-radius: 10px !important;
+    background-image: none !important;
+  }
+  
+  .dialog-title {
+    font-weight: bold !important;
+    color: #ffffff !important;
+  }
+  
+  .dialog-content-text {
+    color: #ffffff !important;
+  }
+  
+  .dialog-button {
+    background-color: #27786200 !important;
+    color: #ffffff !important;
+  }
+  .dialog-button-cancel{
+    background-color: #1f294200 !important;
+    color: #ffffff !important;
+  }
+  .dialog-button-cancel:hover{
+    background-color: #1f294200 !important;
+    color: #ffffff !important;
+    
+  }
+  .dialog-button:hover{
+    background-color: #37877200 !important;
+   
+  }
+
+  button.dialog-button {
+    appearance: none;
+    background: transparent;
+    border: 0;
+    color: #fff;
+    cursor: pointer;
+    font: inherit;
+    font-weight: 500;
+    line-height: 1;
+    padding: 1em 1.5em;
+    position: relative;
+    transition: filter var(--motion-duration);
+    border-radius: 8px !important;
+    overflow: hidden;
+  }
+  
+ 
+  button.dialog-button > svg {
+    fill: #277862;
+    position: absolute;
+    top: -5%;
+    left: -5%;
+    width: 110%;
+    height: 110%;
+  }
+  button.dialog-button-cancel > svg {
+    fill: #1f2942;
+  
+  }
+  button.dialog-button > svg > path {
+    transition: var(--motion-duration) var(--motion-ease);
+  }
+  button.dialog-button > span {
+    display: block;
+    position: relative;
+    transition: transform var(--motion-duration) var(--motion-ease);
+    z-index: 1;
+  }
+  
+  button.dialog-button:hover > span {
+    transform: scale(1.05);
+  }
+  button.dialog-button:active > svg > path {
+    d: path("M0,0 C0,0 100,0 100,0 C100,0 100,100 100,100 C100,100 0,100 0,100 C0,100 0,0 0,0");
+  }
+

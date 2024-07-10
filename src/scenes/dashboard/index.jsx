@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import {
   Box,
   Button,
-  IconButton,
   Typography,
   useTheme,
   Table,
@@ -14,30 +13,36 @@ import {
   Paper,
 } from "@mui/material";
 import { tokens } from "../../theme";
-import { mockTransactions } from "../../data/mockData";
-import DownloadOutlinedIcon from "@mui/icons-material/DownloadOutlined";
 import EmailIcon from "@mui/icons-material/Email";
 import PointOfSaleIcon from "@mui/icons-material/PointOfSale";
 import PersonAddIcon from "@mui/icons-material/PersonAdd";
 import TrafficIcon from "@mui/icons-material/Traffic";
 import Header from "../../components/Header";
-import LineChart from "../../components/LineChart";
-import GeographyChart from "../../components/GeographyChart";
-import BarChart from "../../components/BarChart";
 import StatBox from "../../components/StatBox";
-import ProgressCircle from "../../components/ProgressCircle";
 import { useNavigate } from "react-router-dom";
 import DashboardForm from "../DashboardForm/DashboardForm";
+import ConfirmationDialog from "./ConfirmationDialog";
 
-const Dashboard = (props) => {
+const Dashboard = ({
+  formData, setFormData,
+  rows,
+  setRows,
+  dashboardData,
+  setDashboardData,
+  ...props
+}) => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
-  const [rows, setRows] = useState([]);
-  const [dashboardData, setDashboardData] = useState([]);
-  const handleDownloadClick = () => {
-    setOpen(true);
+ 
+  const [openDialog, setOpenDialog] = useState(false);
+
+  const handelDialogCancel = () => {
+    setOpenDialog(false);
+  };
+  const handleNewDashboardClick = () => {
+    setOpenDialog(true);
   };
 
   const handleFileUpload = (data) => {
@@ -45,16 +50,15 @@ const Dashboard = (props) => {
   };
 
   useEffect(() => {
-    if(!props.defaultOpen){
+    if (!props.defaultOpen) {
       props.setDefaultOpen(true);
       setOpen(true);
     }
-    
   }, []);
 
   useEffect(() => {
     console.log(dashboardData);
-    
+    console.log(dashboardData.html_files);
   }, [dashboardData]);
   return (
     <Box m="20px">
@@ -71,7 +75,7 @@ const Dashboard = (props) => {
               fontWeight: "bold",
               padding: "10px 20px",
             }}
-            onClick={handleDownloadClick}
+            onClick={handleNewDashboardClick}
           >
             New Dashboard
           </Button>
@@ -79,7 +83,13 @@ const Dashboard = (props) => {
       </Box>
 
       {open ? (
-        <DashboardForm setOpen={setOpen} onFileUpload={handleFileUpload} setDashboardData={setDashboardData} />
+        <DashboardForm
+          setOpen={setOpen}
+          onFileUpload={handleFileUpload}
+          setDashboardData={setDashboardData}
+          setFormData={setFormData}
+          formData={formData}
+        />
       ) : (
         <Box
           display="grid"
@@ -96,8 +106,8 @@ const Dashboard = (props) => {
             justifyContent="center"
           >
             <StatBox
-              title="12,361"
-              subtitle="Emails Sent"
+              title={dashboardData.summary && dashboardData.summary[0].Value}
+              subtitle={dashboardData.summary && dashboardData.summary[0].Key}
               progress="0.75"
               increase="+14%"
               icon={
@@ -175,7 +185,13 @@ const Dashboard = (props) => {
             <Typography variant="h5" fontWeight="600">
               Campaign
             </Typography>
-            <Box
+            <iframe
+              src={
+                dashboardData.html_files &&
+                dashboardData.html_files["pie_chart.html"]
+              }
+            ></iframe>
+            {/* <Box
               display="flex"
               flexDirection="column"
               alignItems="center"
@@ -192,40 +208,75 @@ const Dashboard = (props) => {
               <Typography>
                 Includes extra misc expenditures and costs
               </Typography>
-            </Box>
+            </Box> */}
           </Box>
           <Box
             gridColumn="span 4"
             gridRow="span 2"
             backgroundColor={colors.primary[400]}
+            p="30px"
           >
-            <Typography
-              variant="h5"
-              fontWeight="600"
-              sx={{ padding: "30px 30px 0 30px" }}
-            >
-              Sales Quantity
+            <Typography variant="h5" fontWeight="600">
+              Campaign
             </Typography>
-            <Box height="250px" mt="-20px">
-              <BarChart isDashboard={true} />
-            </Box>
+            <iframe
+              src={
+                dashboardData.html_files &&
+                dashboardData.html_files["bar_chart.html"]
+              }
+            ></iframe>
+            {/* <Box
+              display="flex"
+              flexDirection="column"
+              alignItems="center"
+              mt="25px"
+            >
+              <ProgressCircle size="125" />
+              <Typography
+                variant="h5"
+                color={colors.greenAccent[500]}
+                sx={{ mt: "15px" }}
+              >
+                $48,352 revenue generated
+              </Typography>
+              <Typography>
+                Includes extra misc expenditures and costs
+              </Typography>
+            </Box> */}
           </Box>
           <Box
             gridColumn="span 4"
             gridRow="span 2"
             backgroundColor={colors.primary[400]}
-            padding="30px"
+            p="30px"
           >
-            <Typography
-              variant="h5"
-              fontWeight="600"
-              sx={{ marginBottom: "15px" }}
-            >
-              Geography Based Traffic
+            <Typography variant="h5" fontWeight="600">
+              Campaign
             </Typography>
-            <Box height="200px">
-              <GeographyChart isDashboard={true} />
-            </Box>
+            <iframe
+              src={
+                dashboardData.html_files &&
+                dashboardData.html_files["line_chart.html"]
+              }
+            ></iframe>
+            {/* <Box
+              display="flex"
+              flexDirection="column"
+              alignItems="center"
+              mt="25px"
+            >
+              <ProgressCircle size="125" />
+              <Typography
+                variant="h5"
+                color={colors.greenAccent[500]}
+                sx={{ mt: "15px" }}
+              >
+                $48,352 revenue generated
+              </Typography>
+              <Typography>
+                Includes extra misc expenditures and costs
+              </Typography>
+            </Box> */}
           </Box>
           <Box
             gridColumn="span 12"
@@ -241,8 +292,7 @@ const Dashboard = (props) => {
               display="flex"
               justifyContent="space-between"
               alignItems="center"
-            >
-            </Box>
+            ></Box>
             <Box
               flex="1"
               overflow="auto"
@@ -250,14 +300,14 @@ const Dashboard = (props) => {
               p="0px 10px 10px 10px"
               bgcolor={colors.primary[400]}
             >
-              <TableContainer 
-              component={Paper}
-              style={{
-                width: "max-content",
-                minWidth:"100%",
-                height: "fit-content",
-                overflow: "visible",
-              }}
+              <TableContainer
+                component={Paper}
+                style={{
+                  width: "max-content",
+                  minWidth: "100%",
+                  height: "fit-content",
+                  overflow: "visible",
+                }}
               >
                 <Table stickyHeader>
                   <TableHead>
@@ -282,8 +332,18 @@ const Dashboard = (props) => {
           </Box>
 
           {/* ROW 3 */}
-          
         </Box>
+      )}
+      {openDialog ? (
+        <ConfirmationDialog
+          handleClose={handelDialogCancel}
+          handleConfirm={() => {
+            handelDialogCancel();
+            setOpen(true);
+          }}
+        />
+      ) : (
+        " "
       )}
     </Box>
   );
