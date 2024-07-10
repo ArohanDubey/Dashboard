@@ -8,7 +8,6 @@ import { tokens } from "../../theme";
 import * as XLSX from "xlsx";
 import axios from "axios";
 import { useEffect } from "react";
-import { useEffect } from "react";
 
 
 const DashboardForm = ({formData, setFormData, ...props}) => {
@@ -48,9 +47,6 @@ const DashboardForm = ({formData, setFormData, ...props}) => {
       "pie_chart.html": "assets/barGraph.html",
       "bar_chart.html": "assets/barGraph.html",
       "line_chart.html": "assets/barGraph.html"
-      "pie_chart.html": "assets/barGraph.html",
-      "bar_chart.html": "assets/barGraph.html",
-      "line_chart.html": "assets/barGraph.html"
     }
   }
   const handleChange = (e) => {
@@ -87,13 +83,12 @@ const DashboardForm = ({formData, setFormData, ...props}) => {
       setLoading(false);
       props.setOpen(false);
     }, 2000);
-    props.setDashboardData(dummyData)
-    
-    // axios.get('http://127.0.0.1:5000/dashboard').then((response) => {
-    //   console.log("Response Data",response.data)
-    //   props.setDashboardData(dummyData)
-    //   console.log('success')
-    // }).catch();
+
+    axios.get('http://127.0.0.1:5000/dashboard').then((response) => {
+      console.log("Response Data",response.data)
+      props.setDashboardData(dummyData)
+      console.log('success')
+    }).catch();
   };
 
   const handleFileUpload = (event) => {
@@ -127,17 +122,6 @@ const DashboardForm = ({formData, setFormData, ...props}) => {
     //   .catch((error) => {
     //     console.error("Error uploading file:", error);
     //   });
-    // fetch("http://127.0.0.1:5000/upload", {
-    //   method: "POST",
-    //   body: formData,
-    // })
-    //   .then((response) => response.json())
-    //   .then((data) => {
-    //     console.log("File uploaded successfully", data);
-    //   })
-    //   .catch((error) => {
-    //     console.error("Error uploading file:", error);
-    //   });
   };
 
   return (
@@ -149,7 +133,6 @@ const DashboardForm = ({formData, setFormData, ...props}) => {
           more.
         </h3>
         <form onSubmit={handleSubmit}>
-          {/* <input /> */}
           {/* <input /> */}
           <input
             type="text"

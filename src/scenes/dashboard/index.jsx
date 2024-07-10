@@ -76,7 +76,6 @@ const Dashboard = ({
               padding: "10px 20px",
             }}
             onClick={handleNewDashboardClick}
-            onClick={handleNewDashboardClick}
           >
             New Dashboard
           </Button>
@@ -107,8 +106,6 @@ const Dashboard = ({
             justifyContent="center"
           >
             <StatBox
-              title={dashboardData.summary && dashboardData.summary[0].Value}
-              subtitle={dashboardData.summary && dashboardData.summary[0].Key}
               title={dashboardData.summary && dashboardData.summary[0].Value}
               subtitle={dashboardData.summary && dashboardData.summary[0].Key}
               progress="0.75"
@@ -211,7 +208,6 @@ const Dashboard = ({
               <Typography>
                 Includes extra misc expenditures and costs
               </Typography>
-            </Box> */}
             </Box> */}
           </Box>
           <Box
