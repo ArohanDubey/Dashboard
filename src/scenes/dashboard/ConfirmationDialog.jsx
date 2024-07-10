@@ -7,33 +7,62 @@ import {
   DialogTitle,
   Button,
 } from "@mui/material";
-import "../../index.css";
+import "./ConfirmationDialog.css";
 
-const ConfirmationDialog = ({ open, handleClose, handleConfirm }) => {
+const ConfirmationDialog = ({  handleClose, handleConfirm }) => {
   return (
-    <div className="confirmationPopup">
-      <Dialog    
-      open={open}
+    <Dialog
+      open={true}
       onClose={handleClose}
       aria-labelledby="alert-dialog-title"
       aria-describedby="alert-dialog-description"
+      classes={{ paper: "dialog-paper" }}
     >
-      <DialogTitle id="alert-dialog-title">{"Confirm Action"}</DialogTitle>
+      <DialogTitle id="alert-dialog-title" className="dialog-title">
+        {"Confirm Action"}
+      </DialogTitle>
       <DialogContent>
-        <DialogContentText id="alert-dialog-description">
-          Are you sure you want to create a new dashboard? This will discard any unsaved data.
+        <DialogContentText
+          id="alert-dialog-description"
+          className="dialog-content-text"
+        >
+          Are you sure you want to create a new dashboard? This will discard any
+          unsaved data.
         </DialogContentText>
       </DialogContent>
       <DialogActions>
-        <Button onClick={handleClose} color="primary">
-          Cancel
-        </Button>
-        <Button onClick={handleConfirm} color="primary" autoFocus>
-          Confirm
-        </Button>
+        <button
+          onClick={handleClose}
+          color="primary"
+          className=" dialog-button dialog-button-cancel"
+        >
+          <span>Cancel</span>
+          <svg
+            viewBox="-5 -5 110 110"
+            preserveAspectRatio="none"
+            aria-hidden="true"
+          >
+            <path d="M0,0 C30,10 70,10 100,0 C95,30 95,70 100,100 C70,90 30,90 0,100 C5,70 5,30 0,0" />
+          </svg>
+        </button>
+        <button
+          onClick={handleConfirm}
+          color="primary"
+          className="dialog-button"
+          autoFocus
+        >
+          <span>Confirm</span>
+          <svg
+            viewBox="-5 -5 110 110"
+            preserveAspectRatio="none"
+            aria-hidden="true"
+          >
+            <path d="M0,0 C30,10 70,10 100,0 C95,30 95,70 100,100 C70,90 30,90 0,100 C5,70 5,30 0,0" />
+
+          </svg>
+        </button>
       </DialogActions>
     </Dialog>
-    </div>
   );
 };
 
