@@ -140,7 +140,9 @@ body,
     color: white !important;
   }
 
-  iframe{
+  iframe {
     border: none;
-  outline: none;
-  }
+    outline: none;
+    min-width: -webkit-fill-available;
+    min-height: -webkit-fill-available;
+}

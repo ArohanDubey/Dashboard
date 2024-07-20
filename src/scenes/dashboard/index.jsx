@@ -106,15 +106,13 @@ const Dashboard = ({
             justifyContent="center"
           >
             <StatBox
-              title={dashboardData.summary && dashboardData.summary[0].Value}
-              subtitle={dashboardData.summary && dashboardData.summary[0].Key}
-              progress="0.75"
-              increase="+14%"
-              icon={
-                <EmailIcon
-                  sx={{ color: colors.greenAccent[600], fontSize: "26px" }}
-                />
-              }
+              title={dashboardData.summary && dashboardData.summary[0].Value.replaceAll(/[\[\]]/g, "")}
+              subtitle={dashboardData.summary && dashboardData.summary[0].Key.replaceAll(/[\[\]]/g, "")}
+              // icon={
+              //   <EmailIcon
+              //     sx={{ color: colors.greenAccent[600], fontSize: "26px" }}
+              //   />
+              // }
             />
           </Box>
           <Box
@@ -125,15 +123,13 @@ const Dashboard = ({
             justifyContent="center"
           >
             <StatBox
-              title="431,225"
-              subtitle="Sales Obtained"
-              progress="0.50"
-              increase="+21%"
-              icon={
-                <PointOfSaleIcon
-                  sx={{ color: colors.greenAccent[600], fontSize: "26px" }}
-                />
-              }
+              title={dashboardData.summary && dashboardData.summary[1].Value.replaceAll(/[\[\]]/g, "")}
+              subtitle={dashboardData.summary && dashboardData.summary[1].Key.replaceAll(/[\[\]]/g, "")}
+              // icon={
+              //   <PointOfSaleIcon
+              //     sx={{ color: colors.greenAccent[600], fontSize: "26px" }}
+              //   />
+              // }
             />
           </Box>
           <Box
@@ -144,15 +140,13 @@ const Dashboard = ({
             justifyContent="center"
           >
             <StatBox
-              title="32,441"
-              subtitle="New Clients"
-              progress="0.30"
-              increase="+5%"
-              icon={
-                <PersonAddIcon
-                  sx={{ color: colors.greenAccent[600], fontSize: "26px" }}
-                />
-              }
+              title={dashboardData.summary && dashboardData.summary[2].Value.replaceAll(/[\[\]]/g, "")}
+              subtitle={dashboardData.summary && dashboardData.summary[2].Key.replaceAll(/[\[\]]/g, "")}
+              // icon={
+              //   <PersonAddIcon
+              //     sx={{ color: colors.greenAccent[600], fontSize: "26px" }}
+              //   />
+              // }
             />
           </Box>
           <Box
@@ -163,15 +157,13 @@ const Dashboard = ({
             justifyContent="center"
           >
             <StatBox
-              title="1,325,134"
-              subtitle="Traffic Received"
-              progress="0.80"
-              increase="+43%"
-              icon={
-                <TrafficIcon
-                  sx={{ color: colors.greenAccent[600], fontSize: "26px" }}
-                />
-              }
+              title={dashboardData.summary && dashboardData.summary[3].Value.replaceAll(/[\[\]]/g, "")}
+              subtitle={dashboardData.summary && dashboardData.summary[3].Key.replaceAll(/[\[\]]/g, "")}
+              // icon={
+              //   <TrafficIcon
+              //     sx={{ color: colors.greenAccent[600], fontSize: "26px" }}
+              //   />
+              // }
             />
           </Box>
 
@@ -180,15 +172,15 @@ const Dashboard = ({
             gridColumn="span 4"
             gridRow="span 2"
             backgroundColor={colors.primary[400]}
-            p="30px"
+            p="10px"
           >
-            <Typography variant="h5" fontWeight="600">
+            {/* <Typography variant="h5" fontWeight="600">
               Campaign
-            </Typography>
+            </Typography> */}
             <iframe
-              src={
+              srcDoc={
                 dashboardData.html_files &&
-                dashboardData.html_files["pie_chart.html"]
+                dashboardData.html_files.pie_chart
               }
             ></iframe>
             {/* <Box
@@ -214,15 +206,15 @@ const Dashboard = ({
             gridColumn="span 4"
             gridRow="span 2"
             backgroundColor={colors.primary[400]}
-            p="30px"
+            p="10px"
           >
-            <Typography variant="h5" fontWeight="600">
+            {/* <Typography variant="h5" fontWeight="600">
               Campaign
-            </Typography>
+            </Typography> */}
             <iframe
-              src={
+              srcDoc={
                 dashboardData.html_files &&
-                dashboardData.html_files["bar_chart.html"]
+                dashboardData.html_files.bar_chart
               }
             ></iframe>
             {/* <Box
@@ -248,15 +240,15 @@ const Dashboard = ({
             gridColumn="span 4"
             gridRow="span 2"
             backgroundColor={colors.primary[400]}
-            p="30px"
+            p="10px"
           >
-            <Typography variant="h5" fontWeight="600">
+            {/* <Typography variant="h5" fontWeight="600">
               Campaign
-            </Typography>
+            </Typography> */}
             <iframe
-              src={
+              srcDoc={
                 dashboardData.html_files &&
-                dashboardData.html_files["line_chart.html"]
+                dashboardData.html_files.line_chart
               }
             ></iframe>
             {/* <Box

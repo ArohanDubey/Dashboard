@@ -170,7 +170,7 @@ const Sidebar = ({formData}) => {
             </Typography> */}
             <Item
               title="Chat"
-              to="/fileUpload"
+              to="/chat"
               icon={<IoChatbubbleEllipses/>}
               selected={selected}
               setSelected={setSelected}

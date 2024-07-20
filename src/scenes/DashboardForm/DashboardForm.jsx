@@ -10,7 +10,7 @@ import axios from "axios";
 import { useEffect } from "react";
 
 
-const DashboardForm = ({formData, setFormData, ...props}) => {
+const DashboardForm = ({setDashboardData,formData, setFormData, ...props}) => {
   const [fileName, setFileName] = useState();
   const [loading, setLoading] = useState(false);
   const theme = useTheme();
@@ -70,6 +70,19 @@ const DashboardForm = ({formData, setFormData, ...props}) => {
       transition: Bounce,
     });
   };
+  const alertResponseError = () => {
+    toast.error("Error Generating Dashboard please try again", {
+      position: "top-center",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: theme.palette?.mode,
+      transition: Bounce,
+    });
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -78,17 +91,17 @@ const DashboardForm = ({formData, setFormData, ...props}) => {
       return;
     }
     setLoading(true);
-    setTimeout(() => {
-      console.log(formData);
-      setLoading(false);
-      props.setOpen(false);
-    }, 2000);
-
+    
     axios.get('http://127.0.0.1:5000/dashboard').then((response) => {
       console.log("Response Data",response.data)
-      props.setDashboardData(dummyData)
+      setDashboardData(response.data)
       console.log('success')
-    }).catch();
+      setLoading(false);
+      props.setOpen(false);
+    }).catch(() => {
+      setLoading(false);
+      alertResponseError();
+    });
   };
 
   const handleFileUpload = (event) => {
@@ -111,17 +124,17 @@ const DashboardForm = ({formData, setFormData, ...props}) => {
     const formData = new FormData();
     formData.append("file", file);
 
-    // fetch("http://127.0.0.1:5000/upload", {
-    //   method: "POST",
-    //   body: formData,
-    // })
-    //   .then((response) => response.json())
-    //   .then((data) => {
-    //     console.log("File uploaded successfully", data);
-    //   })
-    //   .catch((error) => {
-    //     console.error("Error uploading file:", error);
-    //   });
+    fetch("http://127.0.0.1:5000/upload", {
+      method: "POST",
+      body: formData,
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log("File uploaded successfully", data);
+      })
+      .catch((error) => {
+        console.error("Error uploading file:", error);
+      });
   };
 
   return (
