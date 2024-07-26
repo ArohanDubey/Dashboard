@@ -92,7 +92,7 @@ const DashboardForm = ({setDashboardData,formData, setFormData, ...props}) => {
     }
     setLoading(true);
     
-    axios.get('http://127.0.0.1:5000/dashboard').then((response) => {
+    axios.get('http://127.0.0.1:8080/dashboard').then((response) => {
       console.log("Response Data",response.data)
       setDashboardData(response.data)
       console.log('success')
@@ -124,7 +124,7 @@ const DashboardForm = ({setDashboardData,formData, setFormData, ...props}) => {
     const formData = new FormData();
     formData.append("file", file);
 
-    fetch("http://127.0.0.1:5000/upload", {
+    fetch("http://127.0.0.1:8080/upload", {
       method: "POST",
       body: formData,
     })

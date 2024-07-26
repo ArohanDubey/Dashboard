@@ -26,7 +26,7 @@ import Markdown from 'markdown-to-jsx'
 import "./Chat.css"
 import { PushSpinner,CubeSpinner,RotateSpinner } from "react-spinners-kit";
 
-const FileUpload = ({htmlContent,setHtmlContent,...props}) => {
+const FileUpload = ({htmlContent,setHtmlContent,isResponse,setIsResponse,...props}) => {
   const [search, setSearch] = useState("");
   const [fileName, setFileName] = useState("");
   const [loading, setLoading] = useState(false);
@@ -85,6 +85,7 @@ const FileUpload = ({htmlContent,setHtmlContent,...props}) => {
             setSrcdoc(dev.join(""));
           });
         setLoading(false);
+        setIsResponse(true);
       })
       .catch((error) => {
         console.error("Error fetching HTML file:", error);
@@ -276,7 +277,7 @@ const FileUpload = ({htmlContent,setHtmlContent,...props}) => {
           id="htmlRender"
           style={{ width: "100%", height: "400px", border: "none" }}
         ></iframe>
-      ) : (
+      ) : ( isResponse &&
         <Typography variant="body1" className="textresponse"><Markdown >{htmlContent}</Markdown></Typography>
       )}
 

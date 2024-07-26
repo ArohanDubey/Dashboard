@@ -25,6 +25,7 @@ function App() {
   const [dashboardData, setDashboardData] = useState([]);
   const [rows, setRows] = useState([]);
   const [htmlContent, setHtmlContent] = useState("");
+  const [isResponse,setIsResponse]=useState(false);
   const [formData, setFormData] = useState({
     name: "",
     dashboardName: "",
@@ -44,7 +45,7 @@ function App() {
               <Route path="/contacts" element={<Contacts />} />
               <Route path="/invoices" element={<Invoices />} />
               <Route path="/form" element={<Form />} />
-              <Route path="/chat" element={<Chat htmlContent={htmlContent} setHtmlContent={setHtmlContent}/>} />
+              <Route path="/chat" element={<Chat htmlContent={htmlContent} setHtmlContent={setHtmlContent} isResponse={isResponse} setIsResponse={setIsResponse}/>} />
               <Route path="/bar" element={<Bar />} />
               <Route path="/pie" element={<Pie />} />
               <Route path="/line" element={<Line />} />
