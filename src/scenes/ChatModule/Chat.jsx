@@ -7,7 +7,6 @@ import {
   TextField,
   Typography,
   Skeleton,
-  Modal,
   useTheme,
   Table,
   TableBody,
@@ -17,60 +16,29 @@ import {
   TableRow,
   Paper,
 } from "@mui/material";
-import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import { tokens } from "../../theme";
 import { MdCancel } from "react-icons/md";
 import { BsArrowsFullscreen } from "react-icons/bs";
-import { ExcelRenderer, OutTable } from "react-excel-renderer";
+import { IoSend } from "react-icons/io5";
 import * as XLSX from "xlsx";
 import axios from "axios";
+import Markdown from 'markdown-to-jsx'
+import "./Chat.css"
+import { PushSpinner,CubeSpinner,RotateSpinner } from "react-spinners-kit";
 
-const FileUpload = () => {
+const FileUpload = ({htmlContent,setHtmlContent,isResponse,setIsResponse,...props}) => {
   const [search, setSearch] = useState("");
   const [fileName, setFileName] = useState("");
-  const [htmlContent, setHtmlContent] = useState("");
   const [loading, setLoading] = useState(false);
   const [srcdoc, setSrcdoc] = useState();
   const fileInputRef = useRef(null);
   const [fullScreen, setFullScreen] = useState(false);
   const [previewOpen, setPreviewOpen] = useState(false);
-  const [rows, setRows] = useState([]); // rows state should be initialized here
-  const [showTable, setShowTable] = useState(false); 
+  const [rows, setRows] = useState([]);
+  const [showTable, setShowTable] = useState(false);
+  const [isHtml, setIsHtml] = useState(false);
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
-
-
-  const handleFileUpload = (event) => {
-    const file = event.target.files[0];
-    setFileName(file.name);
-
-    const reader = new FileReader();
-    reader.onload = (e) => {
-      const data = new Uint8Array(e.target.result);
-      const workbook = XLSX.read(data, { type: 'array' });
-      const worksheet = workbook.Sheets[workbook.SheetNames[0]];
-      const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
-
-      setRows(jsonData);
-      setShowTable(false); // Reset the table view on new upload
-    };
-
-    reader.readAsArrayBuffer(file);
-    const formData = new FormData();
-    formData.append("file", file);
-
-    fetch("http://127.0.0.1:5000/upload", {
-      method: "POST",
-      body: formData,
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        console.log("File uploaded successfully", data);
-      })
-      .catch((error) => {
-        console.error("Error uploading file:", error);
-      });
-  };
 
   const handleRemoveFile = () => {
     setSearch("");
@@ -90,26 +58,34 @@ const FileUpload = () => {
   const handlePrompt = () => {
     setLoading(true);
     setSrcdoc("");
+    setSearch("");
     axios
       .get(
-        `http://127.0.0.1:5000/analyze?input=${
-          search.toLowerCase().replaceAll('&', ' and ') +
-          ". Graph height should be " +
-          window.innerHeight +
-          "px and width " +
-          window.innerWidth +
-          "px."
-        }`
+        `http://127.0.0.1:5000/analyze?input=${encodeURIComponent(
+          search.toLowerCase().replaceAll("&", " and ") +
+            ".* Graph height should be " +
+            window.innerHeight +
+            "px and width " +
+            window.innerWidth +
+            "px."
+        )}`
       )
       .then((response) => {
-        setHtmlContent(response.data);
-        setTimeout(() => {
-          const dev = response.data.split('');
-dev.splice(response.data.indexOf('<div>')+4,0, ' style="display:flex; justify-content:center; align-items:center;"');
- 
-          setSrcdoc(dev.join(""));
-        });
+        setIsHtml(!response.data?.text_response);
+        setHtmlContent(response.data?.text_response || response.data);
+        !response.data?.text_response &&
+          setTimeout(() => {
+            const dev = response.data.split("");
+            dev.splice(
+              response.data.indexOf("<div>") + 4,
+              0,
+              ' style="display:flex; justify-content:center; align-items:center;"'
+            );
+
+            setSrcdoc(dev.join(""));
+          });
         setLoading(false);
+        setIsResponse(true);
       })
       .catch((error) => {
         console.error("Error fetching HTML file:", error);
@@ -118,7 +94,6 @@ dev.splice(response.data.indexOf('<div>')+4,0, ' style="display:flex; justify-co
       });
   };
   const alertError = () => {
-   
     toast.error("Graph cannot be Generated please try again", {
       position: "top-center",
       autoClose: 5000,
@@ -131,13 +106,10 @@ dev.splice(response.data.indexOf('<div>')+4,0, ' style="display:flex; justify-co
       transition: Bounce,
     });
   };
-
-  const handleShowPreview = () => {
-    setPreviewOpen(true);
-  };
-
-  const handleClosePreview = () => {
-    setPreviewOpen(false);
+  const handleKeyPress = (event) => {
+    if (event.key === 'Enter') {
+      handlePrompt();
+    }
   };
   const handleViewButtonClick = () => {
     setShowTable(!showTable); // Toggle the visibility of the table
@@ -146,14 +118,13 @@ dev.splice(response.data.indexOf('<div>')+4,0, ' style="display:flex; justify-co
     setFullScreen(!fullScreen);
   };
   return (
-    <div className={"padding "+theme.palette.mode}>
-      <Button
+    <div className={"padding " + theme.palette.mode}>
+      {/* <Button
         variant="contained"
         component="label"
         startIcon={<CloudUploadIcon />}
         sx={{ marginBottom: 2 }}
       >
-        Upload File
         <input
           type="file"
           accept=".csv, .xlsx, .xls"
@@ -161,7 +132,7 @@ dev.splice(response.data.indexOf('<div>')+4,0, ' style="display:flex; justify-co
           ref={fileInputRef}
           style={{ display: "none" }}
         />
-      </Button>
+      </Button> */}
       {fileName && (
         <>
           <Button
@@ -170,7 +141,7 @@ dev.splice(response.data.indexOf('<div>')+4,0, ' style="display:flex; justify-co
             onClick={handleViewButtonClick}
             sx={{ marginBottom: 2 }}
           >
-            {showTable ? 'Hide Table' : 'View Table'}
+            {showTable ? "Hide Table" : "View Table"}
           </Button>
         </>
       )}
@@ -190,13 +161,24 @@ dev.splice(response.data.indexOf('<div>')+4,0, ' style="display:flex; justify-co
         </div>
       )}
 
-      <Box sx={{ display: "flex", alignItems: "center" }}>
+      <Box
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          position: "fixed",
+          bottom: 0,
+          width: "100%",
+          padding: "10px",
+          backgroundColor: "#141b2d",
+        }}
+      >
         <TextField
           type="text"
           variant="outlined"
           placeholder="Prompt..."
           value={search}
           onChange={handleSearch}
+          onKeyPress={handleKeyPress}
           fullWidth
           sx={{
             marginBottom: 2,
@@ -204,16 +186,20 @@ dev.splice(response.data.indexOf('<div>')+4,0, ' style="display:flex; justify-co
             height: "100%",
             paddingTop: "5px",
             paddingBottom: "5px",
+            borderRadius: "50%",
           }}
         />
         <Button
-          variant="outlined"
-          color="secondary"
           onClick={handlePrompt}
-          size="medium"
-          sx={{ height: "100%", marginLeft: "8px", padding: "5px 28px" }}
+          className="primaryButton"
+          size="small"
+          sx={{
+            height: "100%",
+            marginLeft: "8px",
+            padding: "9px 0px",
+          }}
         >
-          Submit
+          <IoSend sx={{ color: "white" }} />
         </Button>
       </Box>
 
@@ -240,14 +226,16 @@ dev.splice(response.data.indexOf('<div>')+4,0, ' style="display:flex; justify-co
       </Box>
 
       {loading ? (
-        <Skeleton
-          animation="wave"
-          variant="rectangular"
-          width="100%"
-          height={400}
-        />
+        // <Skeleton
+        //   animation="wave"
+        //   variant="rectangular"
+        //   width="100%"
+        //   height={400}
+        // />
+        <CubeSpinner/>
       ) : fullScreen ? (
-        <div onDoubleClick={setFullScreen.bind(this, false)}
+        <div
+          onDoubleClick={setFullScreen.bind(this, false)}
           style={{
             zIndex: 2000,
             position: "fixed",
@@ -255,9 +243,9 @@ dev.splice(response.data.indexOf('<div>')+4,0, ' style="display:flex; justify-co
             left: 0,
             width: "100vw",
             height: "100vh",
-            display:"flex",
-            justifyContent:"center",
-            alignItems:"center"
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
           }}
         >
           <div
@@ -276,75 +264,83 @@ dev.splice(response.data.indexOf('<div>')+4,0, ' style="display:flex; justify-co
           <iframe
             srcDoc={srcdoc}
             id="htmlRender"
-            style={{ width: window.innerWidth, height: window.innerHeight, border: "none" }}
+            style={{
+              width: window.innerWidth,
+              height: window.innerHeight,
+              border: "none",
+            }}
           ></iframe>
         </div>
-      ) : (
+      ) : isHtml ? (
         <iframe
           srcDoc={srcdoc}
           id="htmlRender"
           style={{ width: "100%", height: "400px", border: "none" }}
         ></iframe>
+      ) : ( isResponse &&
+        <Typography variant="body1" className="textresponse"><Markdown >{htmlContent}</Markdown></Typography>
       )}
 
       {showTable && rows.length > 0 && (
-        <div  onClick={handleViewButtonClick}
-        style={{
-          zIndex: 2000,
-          position: "fixed",
-          top: 0,
-          left: 0,
-          width: "100vw",
-          height: "100vh",
-          background: "#0000009f",
-          display: "flex",
-          "justify-content": "center",
-          "align-items": "center",
-        }}
-      >
-        {/* <div
+        <div
+          onClick={handleViewButtonClick}
+          style={{
+            zIndex: 2000,
+            position: "fixed",
+            top: 0,
+            left: 0,
+            width: "100vw",
+            height: "100vh",
+            background: "#0000009f",
+            display: "flex",
+            "justify-content": "center",
+            "align-items": "center",
+          }}
+        >
+          {/* <div
           onClick={handleViewButtonClick}
           className="cancelButton"
         >
           <MdCancel  />
         </div> */}
-        <span onClick={(e)=>e.stopPropagation()} style={{
-          display:'block',
-          width: "80%",
-          maxHeight: "400px", // Fixed height
-          overflow: "auto", // Enable scrolling
-        }}>
-        <TableContainer
-        
-        component={Paper}
-        style={{
-          width: "max-content",
-          height: "100%", 
-          overflow: "visible", 
-        }}
-      >
-        <Table stickyHeader> 
-          <TableHead>
-            <TableRow>
-              {rows[0].map((cell, index) => (
-                <TableCell key={index}>{cell}</TableCell>
-              ))}
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {rows.slice(1).map((row, rowIndex) => (
-              <TableRow key={rowIndex}>
-                {row.map((cell, cellIndex) => (
-                  <TableCell key={cellIndex}>{cell}</TableCell>
-                ))}
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
-        </span>
-      </div>
-        
+          <span
+            onClick={(e) => e.stopPropagation()}
+            style={{
+              display: "block",
+              width: "80%",
+              maxHeight: "400px", // Fixed height
+              overflow: "auto", // Enable scrolling
+            }}
+          >
+            <TableContainer
+              component={Paper}
+              style={{
+                width: "max-content",
+                height: "100%",
+                overflow: "visible",
+              }}
+            >
+              <Table stickyHeader>
+                <TableHead>
+                  <TableRow>
+                    {rows[0].map((cell, index) => (
+                      <TableCell key={index}>{cell}</TableCell>
+                    ))}
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {rows.slice(1).map((row, rowIndex) => (
+                    <TableRow key={rowIndex}>
+                      {row.map((cell, cellIndex) => (
+                        <TableCell key={cellIndex}>{cell}</TableCell>
+                      ))}
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </TableContainer>
+          </span>
+        </div>
       )}
       <ToastContainer />
     </div>

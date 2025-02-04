@@ -1,0 +1,9 @@
+.textresponse{
+    padding: 10px;
+    border: 1px solid #1f2a40;
+    border-radius: 16px;
+    background-color: #1f2a40;
+    font-size: 15px;
+    box-shadow: 6px 8px 9px 0px #0b1322;
+    max-width: 65vw;
+}

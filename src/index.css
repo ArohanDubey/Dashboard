@@ -8,6 +8,8 @@ body,
   height: 100%;
   width: 100%;
   font-family: "Source Sans Pro", sans-serif;
+  overflow: auto;
+  max-height: 100vh;
 }
 
 .app {
@@ -118,4 +120,31 @@ body,
 .light ::-webkit-scrollbar-thumb {
   background: #eee;
   border-radius: 10px;
+}
+
+.primaryButton{
+  background-color: #4cceac !important; 
+  color:white !important;
+  border-radius: 50% !important;
+  height: 35px !important;
+  width: 35px !important;
+  min-width: 0 !important;
+  svg{
+    font-size: 18px;
+  }
+}
+ .primaryButton:hover{
+  background-color: #45bb9c !important; 
+  }
+
+  .confirmationPopup{
+    background-color: #141b2d !important;
+    color: white !important;
+  }
+
+  iframe {
+    border: none;
+    outline: none;
+    min-width: -webkit-fill-available;
+    min-height: -webkit-fill-available;
 }
